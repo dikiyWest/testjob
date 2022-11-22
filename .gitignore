@@ -13,6 +13,7 @@ build/
 *.iml
 *.ipr
 out/
+application.properties
 
 ### VS Code ###
 .vscode/

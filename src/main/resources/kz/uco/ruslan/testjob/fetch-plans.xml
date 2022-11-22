@@ -1,0 +1,5 @@
+<fetchPlans xmlns="http://jmix.io/schema/core/fetch-plans">
+    <fetchPlan entity="Account" name="account-withContacts" extends="_base">
+        <property name="contacts" fetchPlan="_base"/>
+    </fetchPlan>
+</fetchPlans>

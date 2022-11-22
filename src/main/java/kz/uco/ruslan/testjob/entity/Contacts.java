@@ -24,6 +24,7 @@ public class Contacts {
 
     @Column(name = "VALUE_")
     private String value;
+
     @OnDeleteInverse(DeletePolicy.CASCADE)
     @JoinColumn(name = "ACCOUNT_ID")
     @ManyToOne(fetch = FetchType.LAZY)

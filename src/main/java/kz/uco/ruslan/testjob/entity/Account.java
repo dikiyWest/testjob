@@ -8,12 +8,14 @@ import io.jmix.core.metamodel.annotation.JmixProperty;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.util.Set;
+import java.util.Collection;
 import java.util.UUID;
 
 @JmixEntity
 @Table(name = "ACCOUNT")
 @Entity
+@DiscriminatorColumn(name = "DTYPE", discriminatorType = DiscriminatorType.STRING)
+@Inheritance(strategy = InheritanceType.JOINED)
 public class Account {
     @JmixGeneratedValue
     @Column(name = "ID", nullable = false)
@@ -33,14 +35,14 @@ public class Account {
     private String middleName;
 
     @OneToMany(mappedBy = "account")
-    private Set<Contacts> contacts;
+    private Collection<Contacts> contacts;
 
-    public Set<Contacts> getContacts() {
-        return contacts;
+    public void setContacts(Collection<Contacts> contacts) {
+        this.contacts = contacts;
     }
 
-    public void setContacts(Set<Contacts> contacts) {
-        this.contacts = contacts;
+    public Collection<Contacts> getContacts() {
+        return contacts;
     }
 
     @JmixProperty

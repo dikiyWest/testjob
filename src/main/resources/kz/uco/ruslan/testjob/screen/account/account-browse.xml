@@ -6,7 +6,10 @@
     <data readOnly="true">
         <collection id="accountsDc"
                     class="kz.uco.ruslan.testjob.entity.Account">
-            <fetchPlan extends="_base"/>
+            <fetchPlan extends="_base">
+                <property name="contacts" fetchPlan="_base"/>
+                <property name="fullName"/>
+            </fetchPlan>
             <loader id="accountsDl">
                 <query>
                     <![CDATA[select e from Account e]]>
