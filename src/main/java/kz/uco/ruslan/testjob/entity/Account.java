@@ -72,6 +72,9 @@ public class Account {
         return "";
     }
 
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
 
     public String getMiddleName() {
         return middleName;
@@ -99,5 +102,15 @@ public class Account {
 
     public void setId(UUID id) {
         this.id = id;
+    }
+
+    @Override
+    public String toString() {
+        return "Account{" +
+                "firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", middleName='" + middleName + '\'' +
+                ", contacts=" + contacts +
+                '}';
     }
 }

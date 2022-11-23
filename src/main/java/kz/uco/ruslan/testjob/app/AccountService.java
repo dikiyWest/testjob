@@ -1,6 +1,7 @@
 package kz.uco.ruslan.testjob.app;
 
 import io.jmix.core.DataManager;
+import io.jmix.ui.screen.Install;
 import kz.uco.ruslan.testjob.entity.Account;
 import kz.uco.ruslan.testjob.entity.Contacts;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,4 +24,5 @@ public class AccountService {
                 .map(Contacts::getValue)
                 .collect(Collectors.joining(", "));
     }
+
 }

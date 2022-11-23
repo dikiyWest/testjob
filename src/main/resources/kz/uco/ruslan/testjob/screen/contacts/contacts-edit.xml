@@ -5,9 +5,7 @@
     <data>
         <instance id="contactsDc"
                   class="kz.uco.ruslan.testjob.entity.Contacts">
-            <fetchPlan extends="_base">
-                <property name="account" fetchPlan="_base"/>
-            </fetchPlan>
+            <fetchPlan extends="_base"/>
             <loader/>
         </instance>
     </data>
@@ -24,8 +22,10 @@
                 caption="msg:///actions.Close"
                 icon="EDITOR_CANCEL"/>
     </actions>
-    <dialogMode height="600"
-                width="800"/>
+    <dialogMode height="AUTO"
+                width="AUTO"
+                modal="true"
+                forceDialog="true"/>
     <layout spacing="true" expand="editActions">
         <form id="form" dataContainer="contactsDc">
             <column width="350px">
@@ -33,7 +33,7 @@
                 <textField id="valueField" property="value"/>
             </column>
         </form>
-        `<hbox id="editActions" spacing="true">
+        <hbox id="editActions" spacing="true">
             <button id="commitAndCloseBtn" action="windowCommitAndClose"/>
             <button id="closeBtn" action="windowClose"/>
         </hbox>
