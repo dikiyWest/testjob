@@ -1,6 +1,7 @@
 package kz.uco.ruslan.testjob.screen.account;
 
 import io.jmix.core.LoadContext;
+import io.jmix.ui.component.Button;
 import io.jmix.ui.model.CollectionLoader;
 import io.jmix.ui.model.InstanceContainer;
 import io.jmix.ui.screen.*;
@@ -25,6 +26,11 @@ public class AccountEdit extends StandardEditor<Account> {
     @Install(to = "contactsesDl", target = Target.DATA_LOADER)
     private List<Contacts> contactsesDlLoadDelegate(LoadContext<Contacts> loadContext) {
         return contactsService.getContactsByAccount(accountDc.getItem());
+    }
+
+    @Subscribe("contactsesTableCreateBtn")
+    public void onContactsesTableCreateBtnClick(Button.ClickEvent event) {
+        
     }
 
 
