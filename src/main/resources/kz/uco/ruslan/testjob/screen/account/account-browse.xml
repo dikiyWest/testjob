@@ -47,7 +47,9 @@
                 <action id="remove" type="remove"/>
             </actions>
             <columns>
+                <column id="photo"/>
                 <column id="fullName"/>
+                <column id="contactsMapedValueCollect"/>
             </columns>
             <simplePagination/>
             <buttonsPanel id="buttonsPanel"

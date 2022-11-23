@@ -1,15 +1,14 @@
 package kz.uco.ruslan.testjob.entity;
 
+import io.jmix.core.FileRef;
 import io.jmix.core.entity.annotation.JmixGeneratedValue;
-import io.jmix.core.metamodel.annotation.DependsOnProperties;
-import io.jmix.core.metamodel.annotation.InstanceName;
-import io.jmix.core.metamodel.annotation.JmixEntity;
-import io.jmix.core.metamodel.annotation.JmixProperty;
+import io.jmix.core.metamodel.annotation.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @JmixEntity
 @Table(name = "ACCOUNT")
@@ -21,6 +20,9 @@ public class Account {
     @Column(name = "ID", nullable = false)
     @Id
     private UUID id;
+
+    @Column(name = "PHOTO", length = 1024)
+    private FileRef photo;
 
     @InstanceName
     @Column(name = "FIRST_NAME", nullable = false)
@@ -34,22 +36,42 @@ public class Account {
     @Column(name = "MIDDLE_NAME")
     private String middleName;
 
+    @Composition
     @OneToMany(mappedBy = "account")
-    private Collection<Contacts> contacts;
+    private List<Contacts> contacts;
 
-    public void setContacts(Collection<Contacts> contacts) {
+    public void setContacts(List<Contacts> contacts) {
         this.contacts = contacts;
     }
 
-    public Collection<Contacts> getContacts() {
+
+    public List<Contacts> getContacts() {
         return contacts;
+    }
+
+    public FileRef getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(FileRef photo) {
+        this.photo = photo;
     }
 
     @JmixProperty
     @DependsOnProperties({"lastName", "firstName", "middleName"})
     public String getFullName() {
-        return String.format("%s %s %s", lastName, firstName, (middleName != null? middleName :"")).trim();
+        return String.format("%s %s %s", lastName, firstName, (middleName != null ? middleName : "")).trim();
     }
+
+    @JmixProperty
+    public String getContactsMapedValueCollect() {
+        if (contacts != null)
+            return contacts.stream()
+                    .map(Contacts::getValue)
+                    .collect(Collectors.joining(", "));
+        return "";
+    }
+
 
     public String getMiddleName() {
         return middleName;

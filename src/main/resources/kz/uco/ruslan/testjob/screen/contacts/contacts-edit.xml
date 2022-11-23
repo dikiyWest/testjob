@@ -31,12 +31,6 @@
             <column width="350px">
                 <comboBox id="typeContactField" property="typeContact"/>
                 <textField id="valueField" property="value"/>
-                <entityPicker id="accountField" property="account">
-                    <actions>
-                        <action id="entityLookup" type="entity_lookup"/>
-                        <action id="entityClear" type="entity_clear"/>
-                    </actions>
-                </entityPicker>
             </column>
         </form>
         `<hbox id="editActions" spacing="true">
