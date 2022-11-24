@@ -29,33 +29,34 @@ public class ContactEdit extends StandardEditor<Contact> {
 
     @Subscribe
     public void onBeforeShow(BeforeShowEvent event) {
-        typeContactField.setValue(TypeContact.EMAIL);
+
+        typeContactField.setValue(TypeContact.PHONE);
     }
 
     @Subscribe("typeContactField")
     public void onTypeContactFieldValueChange(HasValue.ValueChangeEvent<TypeContact> event) {
-        System.out.println("onChange" + typeContactField.getValue());
+        // System.out.println("onChange" + typeContactField.getValue());
+
+        RegexpValidator regexpValidatorEmail = new RegexpValidator("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$");
+        RegexpValidator regexpValidatorPhone = new RegexpValidator("^(\\+\\d||8)(\\s||)\\(\\d{1,3}\\)(\\s||)\\d{1,3}\\-\\d{1,2}\\-\\d{1,2}");
+
+
+        System.out.println(contactDc.getItem());
         if (typeContactField.getValue() != null)
             switch (typeContactField.getValue()) {
                 case EMAIL -> {
-                    RegexpValidator regexpValidator = new RegexpValidator("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$");
-                    valueField.addValidator(regexpValidator);
-                    if (contactDc.getItem().getValue() == null)
-                        valueField.setValue("test@uco.kz");
-                    valueField.setVisible(true);
+                    System.out.println("mail");
+
+                    valueField.getValidators().forEach(System.out::println);
+                    valueField.addValidator(regexpValidatorEmail);
+                    valueField.setValue("test@uco.kz");
                 }
                 case PHONE -> {
                     System.out.println("phone");
-                    RegexpValidator regexpValidator = new RegexpValidator("/^\\+?\\d{1,4}?[-.\\s]?\\(?\\d{1,3}?\\)?[-.\\s]?\\d{1,4}[-.\\s]?\\d{1,4}[-.\\s]?\\d{1,9}\\d{1,9}$/");
-                    valueField.addValidator(regexpValidator);
-                    if (contactDc.getItem().getValue() == null)
-                        valueField.setValue("+7 (701) 111-11-11");
-                    valueField.setVisible(true);
+                    valueField.getValidators().forEach(System.out::println);
+                    valueField.addValidator(regexpValidatorPhone);
+                    valueField.setValue("+7 (701) 111-11-11");
                 }
-                default -> {
-                    valueField.setVisible(false);
-                }
-
             }
     }
 
