@@ -6,19 +6,13 @@
                       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.11.xsd"
         objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
     <changeSet id="1" author="testjob">
-        <createTable tableName="ACCOUNT">
+        <createTable tableName="CONTACTS">
             <column name="ID" type="UUID">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_ACCOUNT"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_CONTACTS"/>
             </column>
-            <column name="DTYPE" type="VARCHAR(31)"/>
-            <column name="PHOTO" type="VARCHAR(1024)"/>
-            <column name="FIRST_NAME" type="VARCHAR(255)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="LAST_NAME" type="VARCHAR(255)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="MIDDLE_NAME" type="VARCHAR(255)"/>
+            <column name="TYPE_CONTACT" type="VARCHAR(255)"/>
+            <column name="VALUE_" type="VARCHAR(255)"/>
+            <column name="ACCOUNT_ID" type="UUID"/>
         </createTable>
     </changeSet>
     <changeSet id="2" author="testjob">

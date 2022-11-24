@@ -2,4 +2,11 @@
     <fetchPlan entity="Account" name="account-withContacts" extends="_instance_name">
         <property name="contacts" fetchPlan="_base"/>
     </fetchPlan>
+    <fetchPlan entity="Account" name="account-with-contacts-fullname">
+        <property name="contacts" fetchPlan="_base">
+        </property>
+        <property name="fullName"/>
+        <property name="contactsMapedValueCollect"/>
+        <property name="photo"/>
+    </fetchPlan>
 </fetchPlans>

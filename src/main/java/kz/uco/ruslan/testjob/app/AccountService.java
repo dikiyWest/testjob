@@ -1,11 +1,8 @@
 package kz.uco.ruslan.testjob.app;
 
 import io.jmix.core.DataManager;
-import io.jmix.ui.screen.Install;
-import kz.uco.ruslan.testjob.entity.Account;
-import kz.uco.ruslan.testjob.entity.Contacts;
+import kz.uco.ruslan.testjob.entity.Contact;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import javax.validation.constraints.NotNull;
@@ -19,9 +16,9 @@ public class AccountService {
     private DataManager dataManager;
 
 
-    public String getContactsMapedValueCollect(@NotNull List<Contacts> contacts){
+    public String getContactsMapedValueCollect(@NotNull List<Contact> contacts){
         return contacts.stream()
-                .map(Contacts::getValue)
+                .map(Contact::getValue)
                 .collect(Collectors.joining(", "));
     }
 

@@ -3,9 +3,11 @@ package kz.uco.ruslan.testjob.entity;
 import io.jmix.core.DeletePolicy;
 import io.jmix.core.entity.annotation.JmixGeneratedValue;
 import io.jmix.core.entity.annotation.OnDeleteInverse;
+import io.jmix.core.metamodel.annotation.InstanceName;
 import io.jmix.core.metamodel.annotation.JmixEntity;
 
 import javax.persistence.*;
+import javax.validation.constraints.Pattern;
 import java.util.UUID;
 
 @JmixEntity
@@ -13,7 +15,7 @@ import java.util.UUID;
         @Index(name = "IDX_CONTACTS_ACCOUNT", columnList = "ACCOUNT_ID")
 })
 @Entity
-public class Contacts {
+public class Contact {
     @JmixGeneratedValue
     @Column(name = "ID", nullable = false)
     @Id
@@ -22,6 +24,7 @@ public class Contacts {
     @Column(name = "TYPE_CONTACT")
     private String typeContact;
 
+    @InstanceName
     @Column(name = "VALUE_")
     private String value;
 
@@ -60,5 +63,14 @@ public class Contacts {
 
     public void setId(UUID id) {
         this.id = id;
+    }
+
+    @Override
+    public String toString() {
+        return "Contact{" +
+                "typeContact='" + typeContact + '\'' +
+                ", value='" + value + '\'' +
+                ", account=" + account +
+                '}';
     }
 }

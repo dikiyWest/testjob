@@ -6,12 +6,11 @@
         <instance id="accountDc"
                   class="kz.uco.ruslan.testjob.entity.Account">
             <fetchPlan extends="_base">
-                <property name="contacts" fetchPlan="_base"/>
-                <property name="fullName"/>
+
             </fetchPlan>
             <loader/>
         </instance>
-        <collection id="contactsesDc" class="kz.uco.ruslan.testjob.entity.Contacts">
+        <collection id="contactsesDc" class="kz.uco.ruslan.testjob.entity.Contact">
             <fetchPlan extends="_base"/>
             <loader id="contactsesDl">
             </loader>
@@ -20,12 +19,6 @@
     <facets>
         <dataLoadCoordinator auto="true"/>
         <screenSettings id="settingsFacet" auto="true"/>
-        <editorScreen id="editorScreen"
-                      editMode="CREATE"
-                      entityClass="kz.uco.ruslan.testjob.entity.Contacts"
-                      onButton="openCreateEditBtn"
-                      addFirst="true">
-        </editorScreen>
     </facets>
     <actions>
         <action id="windowCommitAndClose" caption="msg:///actions.Ok"
@@ -39,33 +32,49 @@
     <dialogMode height="600"
                 width="800"/>
     <layout spacing="true" expand="editActions">
-        <groupTable id="contactsesTable" height="500px" width="300px" dataContainer="contactsesDc">
-            <buttonsPanel alwaysVisible="true">
-                <button id="openCreateEditBtn" />
-            </buttonsPanel>
-            <columns>
-                <column id="typeContact"/>
-                <column id="value"/>
-            </columns>
-        </groupTable>
-        <form id="form" dataContainer="accountDc">
-            <column>
-                <fileStorageUpload id="pictureField" property="photo"/>
-                <image id="image" property="photo"
-                       scaleMode="CONTAIN"
-                       rowspan="10" caption=""
-                       height="200" width="200"/>
-            </column>
-            <column width="350px">
-                <textField id="firstNameField" property="firstName"/>
-                <textField id="lastNameField" property="lastName"/>
-                <textField id="middleNameField" property="middleName"/>
-            </column>
-        </form>
+
         <hbox id="editActions" spacing="true">
+            <form id="form" dataContainer="accountDc">
+
+                <column>
+                    <fileStorageUpload id="pictureField" property="photo"/>
+                    <image id="image" property="photo"
+                           scaleMode="CONTAIN"
+                           rowspan="10" caption=""
+                           height="200" width="200"/>
+                </column>
+                <column width="350px">
+                    <textField id="firstNameField" property="firstName"/>
+                    <textField id="lastNameField" property="lastName"/>
+                    <textField id="middleNameField" property="middleName"/>
+                </column>
+            </form>
+
+            <groupTable id="contactsesTable" height="500px" width="300px" dataContainer="contactsesDc">
+                <actions>
+                    <action id="edit" type="edit"/>
+                    <action id="remove" type="remove"/>
+                </actions>
+
+                <buttonsPanel alwaysVisible="true">
+                    <button id="openCreateContactBtn" icon="CREATE_ACTION" />
+                    <button id="openEditContactBtn" action="contactsesTable.edit"/>
+                    <button id="removeContactBtn" action="contactsesTable.remove"/>
+                </buttonsPanel>
+                <columns>
+                    <column id="typeContact"/>
+                    <column id="value"/>
+                </columns>
+            </groupTable>
+        </hbox>
+
+
+        <buttonsPanel>
             <button id="commitAndCloseBtn" action="windowCommitAndClose"/>
             <button id="closeBtn" action="windowClose"/>
-        </hbox>
+        </buttonsPanel>
+
+
 
     </layout>
 </window>

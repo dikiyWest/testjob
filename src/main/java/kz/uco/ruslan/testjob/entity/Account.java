@@ -6,6 +6,7 @@ import io.jmix.core.metamodel.annotation.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -38,14 +39,16 @@ public class Account {
 
     @Composition
     @OneToMany(mappedBy = "account")
-    private List<Contacts> contacts;
+    private List<Contact> contacts;
 
-    public void setContacts(List<Contacts> contacts) {
+    public void setContacts(List<Contact> contacts) {
         this.contacts = contacts;
     }
 
 
-    public List<Contacts> getContacts() {
+    public List<Contact> getContacts() {
+        if (contacts == null)
+            contacts = new ArrayList<>();
         return contacts;
     }
 
@@ -64,12 +67,13 @@ public class Account {
     }
 
     @JmixProperty
+    @DependsOnProperties({"contacts"})
     public String getContactsMapedValueCollect() {
-        if (contacts != null)
-            return contacts.stream()
-                    .map(Contacts::getValue)
-                    .collect(Collectors.joining(", "));
-        return "";
+        if (getContacts().isEmpty())
+            return "";
+        return getContacts().stream()
+                .map(Contact::getValue)
+                .collect(Collectors.joining(", "));
     }
 
     public void setFirstName(String firstName) {
