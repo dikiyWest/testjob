@@ -1,8 +1,6 @@
 package kz.uco.ruslan.testjob.screen.contact;
 
-import io.jmix.ui.component.ComboBox;
-import io.jmix.ui.component.HasValue;
-import io.jmix.ui.component.TextField;
+import io.jmix.ui.component.*;
 import io.jmix.ui.component.validation.EmailValidator;
 import io.jmix.ui.component.validation.RegexpValidator;
 import io.jmix.ui.model.InstanceContainer;
@@ -11,6 +9,10 @@ import kz.uco.ruslan.testjob.entity.Contact;
 import kz.uco.ruslan.testjob.entity.TypeContact;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+
+import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @UiController("Contact.edit")
 @UiDescriptor("contact-edit.xml")
@@ -23,41 +25,56 @@ public class ContactEdit extends StandardEditor<Contact> {
     @Autowired
     private TextField<String> valueField;
 
+    private final String regexEmail = "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$";
+    private final String regexPhone = "^(\\+\\d||8)(\\s||)\\(\\d{3}\\)(\\s||)\\d{3}\\-\\d{2}\\-\\d{2}";
 
-    @Autowired
-    protected ApplicationContext applicationContext;
+
 
     @Subscribe
-    public void onBeforeShow(BeforeShowEvent event) {
-
-        typeContactField.setValue(TypeContact.PHONE);
+    public void onAfterShow(AfterShowEvent event) {
+        contactDc.getItem().setTypeContact(TypeContact.EMAIL);
     }
+    
 
+
+    
+    
+    
     @Subscribe("typeContactField")
     public void onTypeContactFieldValueChange(HasValue.ValueChangeEvent<TypeContact> event) {
-        // System.out.println("onChange" + typeContactField.getValue());
-
-        RegexpValidator regexpValidatorEmail = new RegexpValidator("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$");
-        RegexpValidator regexpValidatorPhone = new RegexpValidator("^(\\+\\d||8)(\\s||)\\(\\d{1,3}\\)(\\s||)\\d{1,3}\\-\\d{1,2}\\-\\d{1,2}");
-
-
-        System.out.println(contactDc.getItem());
-        if (typeContactField.getValue() != null)
-            switch (typeContactField.getValue()) {
-                case EMAIL -> {
-                    System.out.println("mail");
-
-                    valueField.getValidators().forEach(System.out::println);
-                    valueField.addValidator(regexpValidatorEmail);
-                    valueField.setValue("test@uco.kz");
-                }
-                case PHONE -> {
-                    System.out.println("phone");
-                    valueField.getValidators().forEach(System.out::println);
-                    valueField.addValidator(regexpValidatorPhone);
-                    valueField.setValue("+7 (701) 111-11-11");
-                }
+            if (contactDc.getItem().getAccount() == null) {
+                switch (Objects.requireNonNull(typeContactField.getValue())) {
+                    case EMAIL ->  valueField.setValue("test@uco.kz");
+                    case PHONE ->  valueField.setValue("+7 (701) 111-11-11");
             }
+        }
     }
+
+
+    @Subscribe
+    public void onValidation(ValidationEvent event) {
+        Pattern patternEmail = Pattern.compile(regexEmail);
+        Pattern patternPhone = Pattern.compile(regexPhone);
+        Matcher matcher = getMatcher(patternEmail);
+
+        if (typeContactField.getValue() != null) {
+
+            if (typeContactField.getValue().equals(TypeContact.PHONE))
+                matcher = getMatcher(patternPhone);
+
+            if (!matcher.find()) {
+                ValidationErrors errors = new ValidationErrors();
+                errors.add(valueField, "Invalid name format");
+                event.addErrors(errors);
+            }
+
+        }
+    }
+
+
+    private Matcher getMatcher(Pattern pattern) {
+        return pattern.matcher(Objects.requireNonNull(valueField.getValue()));
+    }
+
 
 }

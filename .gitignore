@@ -1,5 +1,5 @@
 .jmix
-.properties
+application.properties
 
 .gradle
 build/
