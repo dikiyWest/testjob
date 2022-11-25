@@ -1,14 +1,14 @@
 package kz.uco.ruslan.testjob.screen.contact;
 
-import io.jmix.ui.component.*;
-import io.jmix.ui.component.validation.EmailValidator;
-import io.jmix.ui.component.validation.RegexpValidator;
+import io.jmix.ui.component.ComboBox;
+import io.jmix.ui.component.HasValue;
+import io.jmix.ui.component.TextField;
+import io.jmix.ui.component.ValidationErrors;
 import io.jmix.ui.model.InstanceContainer;
 import io.jmix.ui.screen.*;
 import kz.uco.ruslan.testjob.entity.Contact;
 import kz.uco.ruslan.testjob.entity.TypeContact;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 
 import java.util.Objects;
 import java.util.regex.Matcher;
@@ -29,23 +29,18 @@ public class ContactEdit extends StandardEditor<Contact> {
     private final String regexPhone = "^(\\+\\d||8)(\\s||)\\(\\d{3}\\)(\\s||)\\d{3}\\-\\d{2}\\-\\d{2}";
 
 
-
     @Subscribe
     public void onAfterShow(AfterShowEvent event) {
         contactDc.getItem().setTypeContact(TypeContact.EMAIL);
     }
-    
 
 
-    
-    
-    
     @Subscribe("typeContactField")
     public void onTypeContactFieldValueChange(HasValue.ValueChangeEvent<TypeContact> event) {
-            if (contactDc.getItem().getAccount() == null) {
-                switch (Objects.requireNonNull(typeContactField.getValue())) {
-                    case EMAIL ->  valueField.setValue("test@uco.kz");
-                    case PHONE ->  valueField.setValue("+7 (701) 111-11-11");
+        if (contactDc.getItem().getAccount() == null) {
+            switch (Objects.requireNonNull(typeContactField.getValue())) {
+                case EMAIL -> valueField.setValue("test@uco.kz");
+                case PHONE -> valueField.setValue("+7 (701) 111-11-11");
             }
         }
     }

@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <window xmlns="http://jmix.io/schema/ui/window"
-        caption="msg://contactTempEdit.caption"
+        caption="msg://productEdit.caption"
         focusComponent="form">
     <data>
-        <instance id="contactTempDc"
-                  class="kz.uco.ruslan.testjob.entity.ContactTemp">
-            <loader id="contactTempDl"/>
+        <instance id="productDc"
+                  class="kz.uco.ruslan.testjob.entity.Product">
+            <fetchPlan extends="_base"/>
+            <loader/>
         </instance>
     </data>
     <facets>
@@ -22,14 +23,13 @@
                 icon="EDITOR_CANCEL"/>
     </actions>
     <dialogMode height="AUTO"
-                width="AUTO"
-                modal="true"
-                forceDialog="true"/>
+                width="AUTO"/>
     <layout spacing="true" expand="editActions">
-        <form id="form" dataContainer="contactTempDc">
+        <form id="form" dataContainer="productDc">
             <column width="350px">
-                <comboBox id="typeContactField" property="typeContact"/>
-                <textField id="valueField" property="value"/>
+                <textField id="nameField" property="name"/>
+                <textField id="priceField" property="price"/>
+                <textField id="quantityField" property="quantity"/>
             </column>
         </form>
         <hbox id="editActions" spacing="true">

@@ -1,12 +1,19 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <window xmlns="http://jmix.io/schema/ui/window"
         xmlns:c="http://jmix.io/schema/ui/jpql-condition"
-        caption="msg://contactTempBrowse.caption"
-        focusComponent="contactTempsTable">
+        caption="msg://orderBrowse.caption"
+        focusComponent="ordersTable">
     <data readOnly="true">
-        <collection id="contactTempsDc"
-                    class="kz.uco.ruslan.testjob.entity.ContactTemp">
-            <loader id="contactTempsDl"/>
+        <collection id="ordersDc"
+                    class="kz.uco.ruslan.testjob.entity.Order">
+            <fetchPlan extends="_base">
+                <property name="account" fetchPlan="_base"/>
+            </fetchPlan>
+            <loader id="ordersDl">
+                <query>
+                    <![CDATA[select e from Order_ e]]>
+                </query>
+            </loader>
         </collection>
     </data>
     <facets>
@@ -25,23 +32,30 @@
     </actions>
     <dialogMode height="600"
                 width="800"/>
-    <layout expand="contactTempsTable" spacing="true">
-        <groupTable id="contactTempsTable"
+    <layout expand="ordersTable" spacing="true">
+        <filter id="filter"
+                dataLoader="ordersDl">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="ordersTable"
                     width="100%"
-                    dataContainer="contactTempsDc">
+                    dataContainer="ordersDc">
             <actions>
                 <action id="create" type="create"/>
                 <action id="edit" type="edit"/>
                 <action id="remove" type="remove"/>
             </actions>
             <columns>
+                <column id="amount"/>
+                <column id="date"/>
+                <column id="account"/>
             </columns>
             <simplePagination/>
             <buttonsPanel id="buttonsPanel"
                           alwaysVisible="true">
-                <button id="createBtn" action="contactTempsTable.create"/>
-                <button id="editBtn" action="contactTempsTable.edit"/>
-                <button id="removeBtn" action="contactTempsTable.remove"/>
+                <button id="createBtn" action="ordersTable.create"/>
+                <button id="editBtn" action="ordersTable.edit"/>
+                <button id="removeBtn" action="ordersTable.remove"/>
             </buttonsPanel>
         </groupTable>
         <hbox id="lookupActions" spacing="true" visible="false">

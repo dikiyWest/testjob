@@ -8,5 +8,7 @@
         <property name="fullName"/>
         <property name="contactsMapedValueCollect"/>
         <property name="photo"/>
+        <property name="middleName"/>
     </fetchPlan>
+    <fetchPlan entity="Account" name="account-fetch-planaa" extends="_base"/>
 </fetchPlans>

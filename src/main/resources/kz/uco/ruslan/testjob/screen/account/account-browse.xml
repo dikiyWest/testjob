@@ -53,6 +53,8 @@
                 <button id="createBtn" action="accountsTable.create"/>
                 <button id="editBtn" action="accountsTable.edit"/>
                 <button id="removeBtn" action="accountsTable.remove"/>
+                <button id="orderBtn" caption="AccountOrderPage" enable="false"/>
+
             </buttonsPanel>
         </groupTable>
         <hbox id="lookupActions" spacing="true" visible="false">

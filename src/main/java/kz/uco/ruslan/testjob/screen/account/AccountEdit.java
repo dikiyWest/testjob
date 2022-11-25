@@ -45,19 +45,12 @@ public class AccountEdit extends StandardEditor<Account> {
 
     @Install(to = "contactsesDl", target = Target.DATA_LOADER)
     private List<Contact> contactsesDlLoadDelegate(LoadContext<Contact> loadContext) {
-        System.out.println("load method" + accountDc.getItem().getContacts());
         contactsesTable.getItems().getItems().forEach(System.out::println);
         return accountDc.getItem().getContacts();
     }
 
-/*
-    @Subscribe("openEditContactBtn")
-    public void onOpenCreateEditBtnClick(Button.ClickEvent event) {
-    }*/
-
-
     @Subscribe("openCreateContactBtn")
-    public void onOpenCreateBtnClick(Button.ClickEvent event) {
+    public void onOpenCreateContactBtnClick(Button.ClickEvent event) {
         screenBuilders.editor(contactsesTable)
                 .newEntity()
                 .build()

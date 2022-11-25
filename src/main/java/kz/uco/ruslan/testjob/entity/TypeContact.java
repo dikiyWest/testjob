@@ -7,8 +7,8 @@ import javax.annotation.Nullable;
 
 public enum TypeContact implements EnumClass<String> {
 
-    EMAIL("A"),
-    PHONE("B");
+    EMAIL("Email"),
+    PHONE("Phone");
 
     private String id;
 

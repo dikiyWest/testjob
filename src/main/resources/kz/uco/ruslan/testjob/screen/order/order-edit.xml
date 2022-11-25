@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://jmix.io/schema/ui/window"
+        caption="msg://orderEdit.caption"
+        focusComponent="form">
+    <data>
+        <instance id="orderDc"
+                  class="kz.uco.ruslan.testjob.entity.Order">
+            <fetchPlan extends="_base">
+                <property name="account" fetchPlan="_instance_name"/>
+                <property name="products" fetchPlan="_base"/>
+            </fetchPlan>
+            <loader/>
+            <collection id="productsDc" property="products"/>
+        </instance>
+    </data>
+    <facets>
+        <dataLoadCoordinator auto="true"/>
+        <screenSettings id="settingsFacet" auto="true"/>
+    </facets>
+    <actions>
+        <action id="windowCommitAndClose" caption="msg:///actions.Ok"
+                icon="EDITOR_OK"
+                primary="true"
+                shortcut="${COMMIT_SHORTCUT}"/>
+        <action id="windowClose"
+                caption="msg:///actions.Close"
+                icon="EDITOR_CANCEL"/>
+    </actions>
+    <dialogMode height="AUTO"
+                width="AUTO"
+                modal="true"
+                forceDialog="true"/>
+    <layout spacing="true" expand="editActions">
+        <form id="form" dataContainer="orderDc">
+            <column width="350px">
+                <dateField id="dateField" property="date" required="true"/>
+                <textField id="amountField" property="amount" required="true" editable="false"/>
+                <entityPicker id="accountField" property="account" required="true">
+                    <actions>
+                        <action id="entityLookup" type="entity_lookup"/>
+                        <action id="entityClear" type="entity_clear"/>
+                    </actions>
+                </entityPicker>
+
+            </column>
+        </form>
+        <groupBox id="productsBox" width="600px" align="TOP_CENTER">
+            <table id="productsTable" dataContainer="productsDc" width="100%" height="300px">
+                <actions>
+                    <action id="create" type="create"/>
+                    <action id="edit" type="edit"/>
+                    <action id="remove" type="remove"/>
+                </actions>
+                <columns>
+                    <column id="name"/>
+                    <column id="price"/>
+                    <column id="quantity"/>
+                </columns>
+                <buttonsPanel id="productBoxButtonPanel">
+                    <button action="productsTable.create"/>
+                    <button action="productsTable.edit"/>
+                    <button action="productsTable.remove"/>
+                </buttonsPanel>
+            </table>
+        </groupBox>
+        <hbox id="editActions" spacing="true">
+            <button id="commitAndCloseBtn" action="windowCommitAndClose"/>
+            <button id="closeBtn" action="windowClose"/>
+        </hbox>
+    </layout>
+</window>
