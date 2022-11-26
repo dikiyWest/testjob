@@ -1,6 +1,8 @@
-package kz.uco.ruslan.testjob.entity;
+package kz.uco.ruslan.testjob.app;
 
 import io.jmix.core.DataManager;
+import kz.uco.ruslan.testjob.entity.Account;
+import kz.uco.ruslan.testjob.entity.Contact;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -1,22 +1,17 @@
 package kz.uco.ruslan.testjob.screen.contact;
 
+import io.jmix.core.Messages;
 import io.jmix.ui.component.*;
-import io.jmix.ui.model.InstanceContainer;
 import io.jmix.ui.screen.*;
+import kz.uco.ruslan.testjob.app.ContactService;
 import kz.uco.ruslan.testjob.entity.Contact;
 import kz.uco.ruslan.testjob.entity.TypeContact;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import java.util.Objects;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 @UiController("Contact.edit")
 @UiDescriptor("contact-edit.xml")
 @EditedEntityContainer("contactDc")
 public class ContactEdit extends StandardEditor<Contact> {
-    @Autowired
-    private InstanceContainer<Contact> contactDc;
     @Autowired
     private ComboBox<TypeContact> typeContactField;
     @Autowired
@@ -24,78 +19,64 @@ public class ContactEdit extends StandardEditor<Contact> {
     @Autowired
     private TextField<String> valueField;
     @Autowired
-    private TextField<String>  emailField;
-
-
-    private final String regexEmail = "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$";
-    private final String regexPhone = "^(\\+\\d||8)(\\s||)\\(\\d{3}\\)(\\s||)\\d{3}\\-\\d{2}\\-\\d{2}";
-
+    private TextField<String> emailField;
+    @Autowired
+    private ContactService contactService;
+    @Autowired
+    private Messages messages;
 
     @Subscribe
     public void onAfterShow(AfterShowEvent event) {
-        extracted();
+        replaceFieldByContactType();
     }
-
 
     @Subscribe("typeContactField")
     public void onTypeContactFieldValueChange(HasValue.ValueChangeEvent<TypeContact> event) {
-        extracted();
+        replaceFieldByContactType();
     }
 
-    private void extracted() {
+    //Создается 2 поля (emailField,phoneField). По результату typeContactField внедряется определенное поле.
+    private void replaceFieldByContactType() {
         if (typeContactField.getValue() != null) {
             switch (typeContactField.getValue()) {
                 case EMAIL -> {
                     phoneField.setVisible(false);
                     emailField.setVisible(true);
-                    setValueOnTheField(emailField);
+                    //при редактировании. Внедрить значение во временное поле
+                    setValueOnTheParamField(emailField, valueField);
                 }
                 case PHONE -> {
                     emailField.setVisible(false);
                     phoneField.setVisible(true);
-                    setValueOnTheField(phoneField);
+                    //при редактировании. Внедрить значение во временное поле
+                    setValueOnTheParamField(phoneField, valueField);
                 }
             }
         } else typeContactField.setValue(TypeContact.EMAIL);
     }
 
-    private void setValueOnTheField(TextInputField<String> field) {
-        if(valueField.getValue() !=null){
-            field.setValue(valueField.getValue());
+    private void setValueOnTheParamField(TextInputField<String> setField, TextInputField<String> valueField) {
+        if (valueField.getValue() != null) {
+            setField.setValue(valueField.getValue());
         }
     }
-
 
     @Subscribe
     public void onValidation(ValidationEvent event) {
-        Pattern patternEmail = Pattern.compile(regexEmail);
-        Pattern patternPhone = Pattern.compile(regexPhone);
-        Matcher matcher;
         String message;
-        if (typeContactField.getValue() != null) {
-            if (typeContactField.getValue().equals(TypeContact.PHONE)) {
-                valueField.setValue(phoneField.getValue());
-                matcher = getMatcher(patternPhone);
-                message = "invalid phone number";
-            } else {
-                valueField.setValue(emailField.getValue());
-                matcher = getMatcher(patternEmail);
-                message = "invalid email format";
-            }
+        if (typeContactField.getValue().equals(TypeContact.PHONE)) {
+            setValueOnTheParamField(valueField, phoneField);
+            message = messages.getMessage("kz.uco.ruslan.testjob.screen.contact/contactEdit.invalidphone");
+        } else {
+            setValueOnTheParamField(valueField, emailField);
+            message = messages.getMessage("kz.uco.ruslan.testjob.screen.contact/contactEdit.invalidEmail");
+        }
 
-            if (!matcher.find()) {
-                ValidationErrors errors = new ValidationErrors();
-                errors.add(valueField, message);
-                event.addErrors(errors);
-            }
-
+        if (contactService.isValidated(valueField.getValue())) {
+            ValidationErrors errors = new ValidationErrors();
+            errors.add(valueField, message);
+            event.addErrors(errors);
         }
     }
-
-
-    private Matcher getMatcher(Pattern pattern) {
-        return pattern.matcher(Objects.requireNonNull(valueField.getValue()));
-    }
-
 
 }

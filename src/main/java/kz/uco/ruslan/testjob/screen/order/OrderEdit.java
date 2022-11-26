@@ -44,7 +44,6 @@ public class OrderEdit extends StandardEditor<Order> {
         }
     }
 
-
     @Subscribe
     public void onInitEntity(InitEntityEvent<Order> event) {
         if (account != null) {
