@@ -1,9 +1,6 @@
 package kz.uco.ruslan.testjob.screen.contact;
 
-import io.jmix.ui.component.ComboBox;
-import io.jmix.ui.component.HasValue;
-import io.jmix.ui.component.TextField;
-import io.jmix.ui.component.ValidationErrors;
+import io.jmix.ui.component.*;
 import io.jmix.ui.model.InstanceContainer;
 import io.jmix.ui.screen.*;
 import kz.uco.ruslan.testjob.entity.Contact;
@@ -23,7 +20,12 @@ public class ContactEdit extends StandardEditor<Contact> {
     @Autowired
     private ComboBox<TypeContact> typeContactField;
     @Autowired
+    private MaskedField<String> phoneField;
+    @Autowired
     private TextField<String> valueField;
+    @Autowired
+    private TextField<String>  emailField;
+
 
     private final String regexEmail = "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$";
     private final String regexPhone = "^(\\+\\d||8)(\\s||)\\(\\d{3}\\)(\\s||)\\d{3}\\-\\d{2}\\-\\d{2}";
@@ -31,17 +33,35 @@ public class ContactEdit extends StandardEditor<Contact> {
 
     @Subscribe
     public void onAfterShow(AfterShowEvent event) {
-        contactDc.getItem().setTypeContact(TypeContact.EMAIL);
+        extracted();
     }
 
 
     @Subscribe("typeContactField")
     public void onTypeContactFieldValueChange(HasValue.ValueChangeEvent<TypeContact> event) {
-        if (contactDc.getItem().getAccount() == null) {
-            switch (Objects.requireNonNull(typeContactField.getValue())) {
-                case EMAIL -> valueField.setValue("test@uco.kz");
-                case PHONE -> valueField.setValue("+7 (701) 111-11-11");
+        extracted();
+    }
+
+    private void extracted() {
+        if (typeContactField.getValue() != null) {
+            switch (typeContactField.getValue()) {
+                case EMAIL -> {
+                    phoneField.setVisible(false);
+                    emailField.setVisible(true);
+                    setValueOnTheField(emailField);
+                }
+                case PHONE -> {
+                    emailField.setVisible(false);
+                    phoneField.setVisible(true);
+                    setValueOnTheField(phoneField);
+                }
             }
+        } else typeContactField.setValue(TypeContact.EMAIL);
+    }
+
+    private void setValueOnTheField(TextInputField<String> field) {
+        if(valueField.getValue() !=null){
+            field.setValue(valueField.getValue());
         }
     }
 
@@ -50,16 +70,22 @@ public class ContactEdit extends StandardEditor<Contact> {
     public void onValidation(ValidationEvent event) {
         Pattern patternEmail = Pattern.compile(regexEmail);
         Pattern patternPhone = Pattern.compile(regexPhone);
-        Matcher matcher = getMatcher(patternEmail);
-
+        Matcher matcher;
+        String message;
         if (typeContactField.getValue() != null) {
-
-            if (typeContactField.getValue().equals(TypeContact.PHONE))
+            if (typeContactField.getValue().equals(TypeContact.PHONE)) {
+                valueField.setValue(phoneField.getValue());
                 matcher = getMatcher(patternPhone);
+                message = "invalid phone number";
+            } else {
+                valueField.setValue(emailField.getValue());
+                matcher = getMatcher(patternEmail);
+                message = "invalid email format";
+            }
 
             if (!matcher.find()) {
                 ValidationErrors errors = new ValidationErrors();
-                errors.add(valueField, "Invalid name format");
+                errors.add(valueField, message);
                 event.addErrors(errors);
             }
 

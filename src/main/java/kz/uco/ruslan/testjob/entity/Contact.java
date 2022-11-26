@@ -65,10 +65,12 @@ public class Contact {
         this.id = id;
     }
 
+
     @Override
     public String toString() {
         return "Contact{" +
-                "typeContact='" + typeContact + '\'' +
+                "id=" + id +
+                ", typeContact='" + typeContact + '\'' +
                 ", value='" + value + '\'' +
                 ", account=" + account +
                 '}';

@@ -6,15 +6,11 @@
         <instance id="accountDc"
                   class="kz.uco.ruslan.testjob.entity.Account">
             <fetchPlan extends="_base">
-
+                <property name="contacts" fetch="JOIN" fetchPlan="_base"/>
             </fetchPlan>
             <loader/>
+            <collection id="contactsDc" property="contacts"/>
         </instance>
-        <collection id="contactsesDc" class="kz.uco.ruslan.testjob.entity.Contact">
-            <fetchPlan extends="_base"/>
-            <loader id="contactsesDl">
-            </loader>
-        </collection>
     </data>
     <facets>
         <dataLoadCoordinator auto="true"/>
@@ -33,48 +29,44 @@
                 width="800"/>
     <layout spacing="true" expand="editActions">
 
-        <hbox id="editActions" spacing="true">
-            <form id="form" dataContainer="accountDc">
-
-                <column>
-                    <fileStorageUpload id="pictureField" property="photo"/>
-                    <image id="image" property="photo"
-                           scaleMode="CONTAIN"
-                           rowspan="10" caption=""
-                           height="200" width="200"/>
-                </column>
-                <column width="350px">
-                    <textField id="firstNameField" property="firstName"/>
-                    <textField id="lastNameField" property="lastName"/>
-                    <textField id="middleNameField" property="middleName"/>
-                </column>
-            </form>
-
-            <groupTable id="contactsesTable" height="500px" width="300px" dataContainer="contactsesDc">
+        <hbox id="body" spacing="true">
+        <form id="form" dataContainer="accountDc">
+            <column>
+                <fileStorageUpload id="pictureField" property="photo"/>
+                <image id="image" property="photo"
+                       scaleMode="CONTAIN"
+                       rowspan="10" caption=""
+                       height="200" width="200"/>
+            </column>
+            <column width="350px">
+                <textField id="firstNameField" property="firstName"/>
+                <textField id="lastNameField" property="lastName"/>
+                <textField id="middleNameField" property="middleName"/>
+            </column>
+        </form>
+        <groupBox id="contactsBox" caption="msg://kz.uco.ruslan.testjob.entity/Account.contacts">
+            <table id="contactsTable" dataContainer="contactsDc" width="100%" height="400px">
                 <actions>
+                    <action id="create" type="create"/>
                     <action id="edit" type="edit"/>
                     <action id="remove" type="remove"/>
                 </actions>
-
-                <buttonsPanel alwaysVisible="true">
-                    <button id="openCreateContactBtn" icon="CREATE_ACTION" />
-                    <button id="openEditContactBtn" action="contactsesTable.edit"/>
-                    <button id="removeContactBtn" action="contactsesTable.remove"/>
-                </buttonsPanel>
                 <columns>
                     <column id="typeContact"/>
                     <column id="value"/>
                 </columns>
-            </groupTable>
+                <buttonsPanel>
+                    <button action="contactsTable.create"/>
+                    <button action="contactsTable.edit"/>
+                    <button action="contactsTable.remove"/>
+                </buttonsPanel>
+            </table>
+        </groupBox>
         </hbox>
 
-
-        <buttonsPanel>
+        <hbox id="editActions" spacing="true">
             <button id="commitAndCloseBtn" action="windowCommitAndClose"/>
             <button id="closeBtn" action="windowClose"/>
-        </buttonsPanel>
-
-
-
+        </hbox>
     </layout>
 </window>
