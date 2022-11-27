@@ -7,7 +7,6 @@ import io.jmix.core.metamodel.annotation.InstanceName;
 import io.jmix.core.metamodel.annotation.JmixEntity;
 
 import javax.persistence.*;
-import javax.validation.constraints.Pattern;
 import java.util.UUID;
 
 @JmixEntity
@@ -66,13 +65,4 @@ public class Contact {
     }
 
 
-    @Override
-    public String toString() {
-        return "Contact{" +
-                "id=" + id +
-                ", typeContact='" + typeContact + '\'' +
-                ", value='" + value + '\'' +
-                ", account=" + account +
-                '}';
-    }
 }

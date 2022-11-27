@@ -6,7 +6,7 @@
         <instance id="accountDc"
                   class="kz.uco.ruslan.testjob.entity.Account">
             <fetchPlan extends="_base">
-                <property name="contacts" fetch="JOIN" fetchPlan="_base"/>
+                <property name="contacts" fetchPlan="_base"/>
             </fetchPlan>
             <loader/>
             <collection id="contactsDc" property="contacts"/>

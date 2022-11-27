@@ -8,6 +8,8 @@ import kz.uco.ruslan.testjob.entity.Contact;
 import kz.uco.ruslan.testjob.entity.TypeContact;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.lang.reflect.Type;
+
 @UiController("Contact.edit")
 @UiDescriptor("contact-edit.xml")
 @EditedEntityContainer("contactDc")
@@ -72,7 +74,7 @@ public class ContactEdit extends StandardEditor<Contact> {
             message = messages.getMessage("kz.uco.ruslan.testjob.screen.contact/contactEdit.invalidEmail");
         }
 
-        if (contactService.isValidated(valueField.getValue())) {
+        if (contactService.isValidated(valueField.getValue(), typeContactField.getValue())) {
             ValidationErrors errors = new ValidationErrors();
             errors.add(valueField, message);
             event.addErrors(errors);

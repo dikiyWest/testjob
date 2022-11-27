@@ -1,6 +1,6 @@
 package kz.uco.ruslan.testjob.screen.order;
 
-import io.jmix.ui.component.EntityPicker;
+import io.jmix.core.LoadContext;
 import io.jmix.ui.component.TextField;
 import io.jmix.ui.model.CollectionContainer;
 import io.jmix.ui.model.CollectionPropertyContainer;
@@ -13,44 +13,47 @@ import kz.uco.ruslan.testjob.entity.Product;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
-@UiController("Order_.edit")
-@UiDescriptor("order-edit.xml")
-@EditedEntityContainer("orderDc")
-public class OrderEdit extends StandardEditor<Order> {
-    @Autowired
-    private CollectionPropertyContainer<Product> productsDc;
+@UiController("AccountToOrder_.browse")
+@UiDescriptor("from-account-to-order-browse.xml")
+@LookupComponent("table")
+public class AccountToOrderBrowse extends MasterDetailScreen<Order> {
+    private Account account;
 
     @Autowired
     private TextField<Double> amountField;
 
-    private Account account;
-
     @Autowired
-    private EntityPicker<Account> accountField;
+    private CollectionPropertyContainer<Product> productsDc;
 
     @Autowired
     private OrderService orderService;
 
     @Subscribe
+    public void onInitEntity(InitEntityEvent<Order> event) {
+        event.getEntity().setDate(LocalDateTime.now());
+        event.getEntity().setAccount(account);
+    }
+
+    @Subscribe
     public void onInit(InitEvent event) {
         ScreenOptions options = event.getOptions();
         if (options instanceof OrderOptions) {
-            account = ((OrderOptions) options).getAccount();
+            Account account = ((OrderOptions) options).getAccount();
+            if (account != null)
+                this.account = account;
         }
     }
 
-    @Subscribe
-    public void onInitEntity(InitEntityEvent<Order> event) {
-        event.getEntity().setDate(LocalDateTime.now());
+
+    @Install(to = "ordersDl", target = Target.DATA_LOADER)
+    private List<Order> ordersDlLoadDelegate(LoadContext<Order> loadContext) {
+        if (account == null)
+            return orderService.getAllOrderList();
+        return orderService.getOrderListByAccount(account);
     }
 
-    @Subscribe
-    public void onAfterShow(AfterShowEvent event) {
-        if (account != null) {
-            accountField.setValue(account);
-        }
-    }
 
     @Subscribe(id = "productsDc", target = Target.DATA_CONTAINER)
     public void onProductsDcCollectionChange(CollectionContainer.CollectionChangeEvent<Product> event) {
@@ -59,4 +62,3 @@ public class OrderEdit extends StandardEditor<Order> {
 
 
 }
-

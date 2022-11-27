@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.11.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+    <changeSet id="1" author="testjob">
+        <createTable tableName="ACCOUNT">
+            <column name="ID" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_ACCOUNT"/>
+            </column>
+            <column name="DTYPE" type="VARCHAR(31)"/>
+            <column name="PHOTO" type="VARCHAR(1024)"/>
+            <column name="FIRST_NAME" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="LAST_NAME" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="MIDDLE_NAME" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="2" author="testjob">
+        <createTable tableName="CONTACTS">
+            <column name="ID" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_CONTACTS"/>
+            </column>
+            <column name="TYPE_CONTACT" type="VARCHAR(255)"/>
+            <column name="VALUE_" type="VARCHAR(255)"/>
+            <column name="ACCOUNT_ID" type="UUID"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="3" author="testjob">
+        <createTable tableName="ORDER_">
+            <column name="ID" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_ORDER_"/>
+            </column>
+            <column name="ACCOUNT_ID" type="UUID"/>
+            <column name="AMOUNT" type="DOUBLE"/>
+            <column name="DATE_" type="DATETIME"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="4" author="testjob">
+        <createTable tableName="PRODUCT">
+            <column name="ID" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_PRODUCT"/>
+            </column>
+            <column name="NAME" type="VARCHAR(255)"/>
+            <column name="PRICE" type="DOUBLE"/>
+            <column name="QUANTITY" type="INT"/>
+            <column name="ORDER_ID" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="5" author="testjob">
+        <createIndex indexName="IDX_CONTACTS_ACCOUNT" tableName="CONTACTS">
+            <column name="ACCOUNT_ID"/>
+        </createIndex>
+
+        <addForeignKeyConstraint baseColumnNames="ACCOUNT_ID" baseTableName="CONTACTS"
+                                 constraintName="FK_CONTACTS_ON_ACCOUNT" onDelete="CASCADE" referencedColumnNames="ID"
+                                 referencedTableName="ACCOUNT"/>
+    </changeSet>
+    <changeSet id="6" author="testjob">
+        <createIndex indexName="IDX_ORDER__ACCOUNT" tableName="ORDER_">
+            <column name="ACCOUNT_ID"/>
+        </createIndex>
+
+        <addForeignKeyConstraint baseColumnNames="ACCOUNT_ID" baseTableName="ORDER_"
+                                 constraintName="FK_ORDER__ON_ACCOUNT" onDelete="CASCADE" referencedColumnNames="ID"
+                                 referencedTableName="ACCOUNT"/>
+    </changeSet>
+    <changeSet id="7" author="testjob">
+        <createIndex indexName="IDX_PRODUCT_ORDER" tableName="PRODUCT">
+            <column name="ORDER_ID"/>
+        </createIndex>
+
+        <addForeignKeyConstraint baseColumnNames="ORDER_ID" baseTableName="PRODUCT" constraintName="FK_PRODUCT_ON_ORDER"
+                                 onDelete="CASCADE" referencedColumnNames="ID" referencedTableName="ORDER_"/>
+    </changeSet>
+</databaseChangeLog>

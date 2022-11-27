@@ -9,7 +9,6 @@ import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @JmixEntity
 @Table(name = "ACCOUNT")
@@ -45,7 +44,6 @@ public class Account {
         this.contacts = contacts;
     }
 
-
     public List<Contact> getContacts() {
         if (contacts == null)
             contacts = new ArrayList<>();
@@ -67,13 +65,15 @@ public class Account {
     }
 
     @JmixProperty
-    @DependsOnProperties({"contacts"})
+    @Transient
+    private String contactsMapedValueCollect;
+
     public String getContactsMapedValueCollect() {
-        if (getContacts().isEmpty())
-            return "";
-        return getContacts().stream()
-                .map(Contact::getValue)
-                .collect(Collectors.joining(", "));
+        return contactsMapedValueCollect;
+    }
+
+    public void setContactsMapedValueCollect(String contactsMapedValueCollect) {
+        this.contactsMapedValueCollect = contactsMapedValueCollect;
     }
 
     public void setFirstName(String firstName) {

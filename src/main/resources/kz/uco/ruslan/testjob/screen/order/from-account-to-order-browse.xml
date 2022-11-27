@@ -1,13 +1,13 @@
 <window xmlns="http://jmix.io/schema/ui/window"
         xmlns:c="http://jmix.io/schema/ui/jpql-condition"
-        caption="msg://accountOrderBrowse.caption"
+        caption="msg://accountToOrderBrowse.caption"
         focusComponent="table">
     <data>
         <collection id="ordersDc"
                     class="kz.uco.ruslan.testjob.entity.Order">
             <fetchPlan extends="_base">
-                <property name="account" fetchPlan="_instance_name"/>
                 <property name="products" fetchPlan="_base"/>
+                <property name="account" fetchPlan="_instance_name"/>
             </fetchPlan>
             <loader id="ordersDl">
                 <query>
@@ -18,8 +18,8 @@
         <instance id="orderDc"
                   class="kz.uco.ruslan.testjob.entity.Order">
             <fetchPlan extends="_base">
-                <property name="account" fetchPlan="_instance_name"/>
                 <property name="products" fetchPlan="_base"/>
+                <property name="account" fetchPlan="_instance_name"/>
             </fetchPlan>
             <loader/>
             <collection id="productsDc" property="products"/>
@@ -49,9 +49,9 @@
                         <action id="remove" type="remove"/>
                     </actions>
                     <columns>
-                        <column id="account"/>
                         <column id="amount"/>
                         <column id="date"/>
+                        <column id="account"/>
                     </columns>
                     <simplePagination/>
                     <buttonsPanel id="buttonsPanel"
@@ -74,15 +74,10 @@
                                        height="100%">
                                 <form id="form" dataContainer="orderDc">
                                     <column width="350px">
-                                        <entityPicker id="accountField" property="account" editable="false"
-                                                      enable="false">
-                                            <actions>
-                                                <action id="entityLookup" type="entity_lookup"/>
-                                                <action id="entityClear" type="entity_clear"/>
-                                            </actions>
-                                        </entityPicker>
-                                        <textField id="amountField" property="amount" editable="false" enable="false"/>
-                                        <dateField id="dateField" property="date" enable="false" editable="false"/>
+                                        <textField id="amountField" property="amount" enable="false" editable="false"/>
+                                        <dateField id="dateField" property="date"/>
+                                        <entityPicker id="accountField" property="account" enable="false"
+                                                      editable="false"/>
                                     </column>
                                 </form>
                             </scrollBox>
@@ -90,11 +85,21 @@
                         <tab id="productsTab" caption="msg://kz.uco.ruslan.testjob.entity/Order.products"
                              margin="true,false,false,false">
                             <table id="productsTable" dataContainer="productsDc" width="100%" height="200px">
+                                <actions>
+                                    <action id="create" type="create"/>
+                                    <action id="edit" type="edit"/>
+                                    <action id="remove" type="remove"/>
+                                </actions>
                                 <columns>
                                     <column id="name"/>
                                     <column id="price"/>
                                     <column id="quantity"/>
                                 </columns>
+                                <buttonsPanel>
+                                    <button action="productsTable.create"/>
+                                    <button action="productsTable.edit"/>
+                                    <button action="productsTable.remove"/>
+                                </buttonsPanel>
                             </table>
                         </tab>
                     </tabSheet>

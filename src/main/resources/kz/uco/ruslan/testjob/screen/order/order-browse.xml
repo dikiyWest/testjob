@@ -7,7 +7,7 @@
         <collection id="ordersDc"
                     class="kz.uco.ruslan.testjob.entity.Order">
             <fetchPlan extends="_base">
-                <property name="account" fetchPlan="_base"/>
+                <property name="account" fetchPlan="_instance_name"/>
             </fetchPlan>
             <loader id="ordersDl">
                 <query>

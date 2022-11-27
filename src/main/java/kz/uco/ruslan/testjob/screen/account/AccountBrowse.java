@@ -5,6 +5,7 @@ import io.jmix.ui.UiComponents;
 import io.jmix.ui.component.*;
 import io.jmix.ui.screen.LookupComponent;
 import io.jmix.ui.screen.*;
+import kz.uco.ruslan.testjob.app.ContactService;
 import kz.uco.ruslan.testjob.app.OrderOptions;
 import kz.uco.ruslan.testjob.entity.Account;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,11 @@ public class AccountBrowse extends StandardLookup<Account> {
     private ScreenBuilders screenBuilders;
     @Autowired
     private Button orderBtn;
+
     private Account account;
+
+    @Autowired
+    private ContactService contactService;
 
     @Install(to = "accountsTable.photo", subject = "columnGenerator")
     private Component accountsTablePhotoColumnGenerator(Account account) {
@@ -36,6 +41,14 @@ public class AccountBrowse extends StandardLookup<Account> {
         }
     }
 
+    @Install(to = "accountsTable.contactsMapedValueCollect", subject = "columnGenerator")
+    private Component accountsTableContactsMapedValueCollectColumnGenerator(Account account) {
+        Label label = uiComponents.create(Label.class);
+        if (!account.getContacts().isEmpty())
+            label.setValue(contactService.getCollectContactsByAccount(account));
+        return label;
+    }
+
     @Subscribe("accountsTable")
     public void onAccountsTableSelection(Table.SelectionEvent<Account> event) {
         if (event.getSelected().isEmpty()) {
@@ -48,13 +61,11 @@ public class AccountBrowse extends StandardLookup<Account> {
 
     @Subscribe("orderBtn")
     public void onOrderBtnClick(Button.ClickEvent event) {
-        String orderScreenId = "Account.Order_.browse";
+        String orderScreenId = "AccountToOrder_.browse";
         screenBuilders.screen(this)
                 .withScreenId(orderScreenId)
                 .withOptions(new OrderOptions(account))
                 .build()
                 .show();
     }
-
-
 }
